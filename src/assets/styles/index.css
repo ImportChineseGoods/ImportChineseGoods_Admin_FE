@@ -1,0 +1,166 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    line-height: 1.6;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+input,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.custom-header .ant-menu::before {
+    content: none !important;
+    display: none !important;
+}
+
+:where(.ant-menu)::before {
+    content: none !important;
+    display: none !important;
+}
+  
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading {
+    display: fixed;
+    left: 50%;
+
+}
+
+.layout {
+    position: relative;
+    flex-direction: row;
+}
+
+.layouSider {
+    position: fixed;
+    height: 100%;
+    top: 56px;
+    z-index: 1;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.layoutBody {
+    width: 100%;
+}
+
+.layoutContent {
+    display: flex;
+    padding: 20px 30px;
+    margin: 70px 0 0 200px;
+    min-height: 90vh;
+}
+
+.logo {
+    display: flex;
+    margin: 10px 0;
+}
+
+.layoutHeader {
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 50px ;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+}
+
+.layoutLogo {
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+.productBox {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.shopList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shopOrder {
+    margin: 10px 0;
+    padding: 10px 0;
+    background-color: #fff;
+    border-radius: 10px;
+    border: solid 1px #50AAFF;
+}
+
+.inputConsignment {
+    margin: 0 100px;
+
+}
+
+.detailBox {
+    width: 100%;
+    padding: 20px;
+    gap: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.two-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }

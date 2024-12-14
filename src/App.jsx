@@ -1,47 +1,22 @@
-
+import React from "react";
+import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
-import Header from "./components/layout/header";
-import axios from "./util/axios.custiomize"
-import { useContext, useEffect } from "react"
-import { AuthContext } from "./components/context/authcontext";
-import { notification, Spin } from "antd";
+import Header from "@components/layout/header"; // Header component
+import SiderWeb from "@components/layout/sider"; // Sider component
+
 
 function App() {
-  const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
-  useEffect(() => {
-    const fetchAccount = async () => {
-      setAppLoading(true);
-      const res = await axios.get(`/v1/api/account`);
-      if (res?.email) {
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            emai: res?.email,
-            name: res?.name,
-            id: res?.id
-          }
-        })
-      } else {
-        notification.error({
-          message: res.message,
-          description: res?.EM ?? "Đã có lỗi xảy ra",
-        });
-      }
-      setAppLoading(false);
-    }
-    fetchAccount();
-  }, [])
   return (
-    <>
-      {appLoading ?
-          <Spin fullscreen /> :
-        <>
-          <Header />
+    <Layout className="layout">
+      <SiderWeb />
+      <Layout className="layoutBody">
+        <Header />
+        <Layout className="layoutContent">
           <Outlet />
-        </>
-      }
-    </>
-  )
+        </Layout>
+      </Layout>
+    </Layout>
+  );
 }
 
-export default App
+export default App;

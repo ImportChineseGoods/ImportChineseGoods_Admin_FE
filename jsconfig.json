@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./", // Thư mục gốc cho các đường dẫn tương đối
+      "paths": {
+        "@components/*": ["src/generals/components/*"],
+        "@helpers/*": ["src/generals/helpers/*"],
+        "@generals/*": ["src/generals/*"],      
+        "@pages/*": ["src/pages/*"],
+        "@api/*": ["src/api/*"],
+        "@assets/*": ["src/assets/*"],
+        "@/*": ["src/*"],
+      }
+    },
+    "include": ["src/**/*"] // Đảm bảo VSCode nhận diện tất cả file trong `src`
+  }
+  
