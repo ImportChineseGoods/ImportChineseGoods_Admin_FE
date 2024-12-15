@@ -31,7 +31,7 @@ export const AuthWrapper = (props) => {
   const [applicableRate, setApplicableRate] = useState('Đang tải...');
 
   useEffect(() => {
-    if (1) {
+    if (auth.isAuthenticated) {
       parametersApi.getByType('applicable_rate')
         .then((res) => {
           if (res.status === 200) {

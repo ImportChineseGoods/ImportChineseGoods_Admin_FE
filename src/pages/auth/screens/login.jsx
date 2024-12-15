@@ -1,4 +1,4 @@
-import { Button, Form, Input, notification } from 'antd';
+import { Button, Form, Flex, Input, notification } from 'antd';
 import React, { useContext } from 'react';
 import { customerApi } from '@api/customerApi';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,8 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className='center-div'>
+    <Flex vertical gap="middle" justify="center" align="center" style={{ height: '100vh' }}>
+      <h2>Đăng nhập</h2>
       <Form
         name="basic"
         initialValues={{
@@ -59,6 +60,7 @@ const LoginScreen = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         layout='vertical'
+        style={{ width: '500px' }}
       >
         <Form.Item
           label="Email"
@@ -87,12 +89,24 @@ const LoginScreen = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Đăng nhập
-          </Button>
+          <Flex vertical>
+            <Flex align='center'> 
+              <Button type="link" onClick={() => navigate('/auth/register')}>
+                Bạn chưa có tài khoản? Đăng ký
+              </Button>
+              {/* <Button type="link" onClick={() => navigate('/auth/forgot-password')}>
+                Quên mật khẩu
+              </Button> */}
+            </Flex>
+            <Button type="primary" htmlType="submit">
+              Đăng nhập
+            </Button>
+
+          </Flex>
+
         </Form.Item>
       </Form>
-    </div>
+    </Flex>
   );
 };
 

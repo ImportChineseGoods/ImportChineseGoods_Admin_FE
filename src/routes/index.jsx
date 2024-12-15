@@ -56,12 +56,11 @@ const router = createBrowserRouter([
       },
 
       ...protectedRoutes.map(route => createProtectedRoute(route.path, route.component)),
-
-      {
-        path: "auth/*",
-        element: <Auth />,
-      },
     ],
+  },
+  {
+    path: "auth/*",
+    element: <Auth />,
   },
   {
     path: "*",

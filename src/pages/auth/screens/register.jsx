@@ -1,28 +1,28 @@
-import { Button, Checkbox, Form, Input, notification } from 'antd';
+import { Button, Flex, Form, Input, notification } from 'antd';
 import React from 'react';
 import { customerApi } from '@api/customerApi';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import '@assets/styles/index.css';
 
 
 const RegisterScreen = () => {
     const navigate = useNavigate();
 
-    const onFinish = async(values) => {
+    const onFinish = async (values) => {
         const { name, phone, email, password } = values;
 
         const res = await customerApi.createCustomer(name, phone, email, password);
-    
-        if (res) {
+
+        if (res.status === 200) {
             notification.success({
                 message: 'Đăng ký thành công',
                 description: 'Chuyển đến trang đăng nhập'
             })
-            navigate('/login');
+            navigate('/auth/login')
         } else {
             notification.error({
                 message: 'Đăng ký thất bại',
-                description: 'Đã có lỗi xảy ra, vui lòng thử lại'
+                description: res?.RM ?? "error"
             })
         }
     };
@@ -30,7 +30,8 @@ const RegisterScreen = () => {
         console.log('Failed:', errorInfo);
     };
     return (
-        <div className='center-div'>
+        <Flex vertical gap="middle" justify="center" align="center" style={{ height: '100vh' }}>
+            <h2>Đăng ký tài khoản</h2>
             <Form
                 name="basic"
                 initialValues={{
@@ -40,6 +41,7 @@ const RegisterScreen = () => {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
                 layout='vertical'
+                style={{ width: '500px' }}
             >
                 <Form.Item
                     label="Họ và tên"
@@ -64,7 +66,7 @@ const RegisterScreen = () => {
                         },
                     ]}
                 >
-                    <Input />
+                    <Input type='tel' />
                 </Form.Item>
 
                 <Form.Item
@@ -95,12 +97,21 @@ const RegisterScreen = () => {
 
                 <Form.Item
                 >
-                    <Button type="primary" htmlType="submit">
-                        Đăng ký
-                    </Button>
+                    <Flex vertical>
+                        <Flex align='center'>
+                            <Button type="link" onClick={() => navigate('/auth/login')}>
+                                Bạn đã có tài khoản? Đăng nhập
+                            </Button>
+                        </Flex>
+                        <Button type="primary" htmlType="submit">
+                            Đăng ký
+                        </Button>
+
+                    </Flex>
+
                 </Form.Item>
             </Form>
-        </div>
+        </Flex>
     )
 }
 
