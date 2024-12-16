@@ -5,7 +5,7 @@ import uploadImageToCloudinary from '@generals/utils/uploadImage';
 import { Link } from 'react-router-dom';
 import { complaintApi } from '@api/complaintApi';
 import TextArea from 'antd/es/input/TextArea';
-import { getData } from '@api/getDataApi';
+import { adminData } from '@api/adminDataApi';
 import { complaintArray } from '@generals/constants/AppResource';
 
 const formItemLayout = {
@@ -45,7 +45,7 @@ const CreateComplaint = () => {
 
     useEffect(() => {
         const fetchOrder = async () => {
-            const res = await getData.complaintOrderData();
+            const res = await adminData.complaintOrderData();
             if (res.status === 200) {
                 setDataOrder(res.data);
             }

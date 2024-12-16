@@ -1,69 +1,90 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { DoubleRightOutlined, LaptopOutlined } from '@ant-design/icons';
-import { Breadcrumb, Card, Divider, Flex, Layout, List, theme } from 'antd';
+import { Breadcrumb, Card, Divider, Flex, Layout, List, notification } from 'antd';
 import { AuthContext } from '@generals/contexts/authcontext';
 import { Link } from 'react-router-dom';
-import { getData } from '@api/getDataApi';
+import { adminData } from '@api/adminDataApi';
 import { formatUnit } from '@helpers/formatUnit';
+import { use } from 'react';
 
 const Homepage = () => {
   const { auth, appLoading, setAppLoading } = useContext(AuthContext);
-  const [balance, setBalance] = useState(0);
-  const [ordersCount, setOrdersCount] = useState(0);
-  const [consignmentsCount, setConsignmentsCount] = useState(0);
-  const [complaintsCount, setComplaintsCount] = useState(0);
+  const [dataOverview, setDataOverview] = useState({});
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     setAppLoading(true);
-      getData.overviewData()
-        .then((res) => {
-          if (res.status === 200) {
-            setBalance(res.data?.balance);
-            setOrdersCount(res.data?.ordersCount);
-            setConsignmentsCount(res.data?.consignmentsCount);
-            setComplaintsCount(res.data?.complaintsCount);
-          } else {
-            notification.error({
-              message: 'Lấy thông tin thất bại',
-              description: res?.RM ?? "error"
-            });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
+    adminData.overviewData()
+      .then((res) => {
+        if (res.status === 200) {
+          setDataOverview(res.data);
+        } else {
           notification.error({
             message: 'Lấy thông tin thất bại',
-            description: err?.RM ?? "error"
+            description: res?.RM ?? "error"
           });
-        })
-        .finally(() => {
-          setAppLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        notification.error({
+          message: 'Lấy thông tin thất bại',
+          description: err?.RM ?? "error"
         });
+      })
+      .finally(() => {
+        setAppLoading(false);
+      });
   }, []);
 
-  const data = [
-    {
-      title: 'Số dư',
-      icon: <LaptopOutlined />,
-      content: `${formatUnit.moneyVN(balance)}`,
-      link: '/transactions'
-    },
-    {
-      title: 'Đơn đặt hàng',
-      content: `${formatUnit.number(ordersCount)} đơn`,
-      link: '/orders'
-    },
-    {
-      title: 'Đơn ký gửi',
-      content: `${formatUnit.number(consignmentsCount)} đơn`,
-      link: '/consignments'
-    },
-    {
-      title: 'Khiếu nại',
-      content: `${formatUnit.number(complaintsCount)} khiếu nại`,
-      link: '/complaints'
-    },
-  ];
+ useEffect(() => {
+    if (dataOverview && auth.user.role !== 'warehouse') {
+      const { ordersCount, consignmentsCount, complaintsCount, dailyRevenue } = dataOverview;
+      setData([
+        {
+          title: 'Doanh thu ngày',
+          icon: <LaptopOutlined />,
+          content: `${formatUnit.moneyVN(dailyRevenue)}`,
+          link: '/transactions'
+        },
+        {
+          title: 'Đơn đặt hàng chờ xử lý',
+          content: `${formatUnit.number(ordersCount)} đơn`,
+          link: '/orders'
+        },
+        {
+          title: 'Đơn ký gửi chờ xử lý',
+          content: `${formatUnit.number(consignmentsCount)} đơn`,
+          link: '/consignments'
+        },
+        {
+          title: 'Khiếu nại chờ xử lý',
+          content: `${formatUnit.number(complaintsCount)} khiếu nại`,
+          link: '/complaints'
+        },
+      ])
+    } else if (dataOverview && auth.user.role === 'warehouse') {
+      const { deliveryNoteCount, warehouseVN, warehouseTQ } = dataOverview;
+      setData([
+        {
+          title: 'Phiếu xuất hàng chưa xuất',
+          content: `${formatUnit.number(deliveryNoteCount)} phiếu`,
+          link: '/delivery-notes'
+        },
+        {
+          title: 'Kho Việt Nam',
+          content: `${formatUnit.number(warehouseVN)} đơn`,
+          link: '/warehouse-vn/manageBol'
+        },
+        {
+          title: 'Kho Trung Quốc',
+          content: `${formatUnit.number(warehouseTQ)} đơn`,
+          link: '/warehouse-tq/manageBol'
+        },
+      ])
+    }
+  }, [dataOverview]);
+
   return (
     <>
       <Layout>
@@ -76,8 +97,8 @@ const Homepage = () => {
               title: 'Tổng quan',
             },
           ]}
-          />
-      <Divider></Divider>
+        />
+        <Divider></Divider>
         <List
           grid={{
             gutter: 16,
@@ -87,11 +108,10 @@ const Homepage = () => {
           renderItem={(item) => (
             <List.Item>
               <Card loading={appLoading} title={item.title} icon={item.icon}>
-                <Flex style={{justifyContent: 'space-between'}}>
+                <Flex style={{ justifyContent: 'space-between' }}>
                   <p>{item.content}</p>
                   <Link to={item.link}>Xem thêm <DoubleRightOutlined /></Link>
                 </Flex>
-                
               </Card>
             </List.Item>
           )}

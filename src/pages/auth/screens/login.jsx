@@ -1,20 +1,19 @@
 import { Button, Form, Flex, Input, notification } from 'antd';
 import React, { useContext } from 'react';
-import { customerApi } from '@api/customerApi';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@generals/contexts/authcontext'; // Import AuthContext
+import { employeeApi } from '@api/employeeApi';
 
 const LoginScreen = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext); // Lấy setAuth từ context
 
   const onFinish = async (values) => {
-    const { email, password } = values;
+    const { username, password } = values;
 
-    const res = await customerApi.loginCustomer(email, password);
+    const res = await employeeApi.loginEmployee(username, password);
 
     if (res?.status === 200) {
-      // Lưu access_token và thông tin người dùng vào localStorage
       localStorage.setItem('access_token', res.access_token);
       localStorage.setItem('user', JSON.stringify(res?.user)); // Lưu thông tin user
 
@@ -27,14 +26,14 @@ const LoginScreen = () => {
       setAuth({
         isAuthenticated: true,
         user: {
-          email: res?.user?.email,
           name: res?.user?.name,
+          username: res?.user?.username,
           id: res?.user?.id,
           avatar: res?.user?.avatar,
+          role: res?.user?.role
         }
       });
 
-      // Điều hướng về trang home
       navigate('/');
     } else {
       notification.error({
@@ -63,12 +62,12 @@ const LoginScreen = () => {
         style={{ width: '500px' }}
       >
         <Form.Item
-          label="Email"
-          name="email"
+          label="Username"
+          name="username"
           rules={[
             {
               required: true,
-              message: 'Hãy nhập email của bạn',
+              message: 'Hãy nhập tên đăng nhập',
             },
           ]}
         >
@@ -90,14 +89,6 @@ const LoginScreen = () => {
 
         <Form.Item>
           <Flex vertical>
-            <Flex align='center'> 
-              <Button type="link" onClick={() => navigate('/auth/register')}>
-                Bạn chưa có tài khoản? Đăng ký
-              </Button>
-              {/* <Button type="link" onClick={() => navigate('/auth/forgot-password')}>
-                Quên mật khẩu
-              </Button> */}
-            </Flex>
             <Button type="primary" htmlType="submit">
               Đăng nhập
             </Button>

@@ -63,6 +63,18 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
       dataIndex: 'id',
     },
     {
+      title: 'Khách hàng',
+      dataIndex: 'customer',
+      render: (customer) => {
+        return (
+          <Flex vertical>
+            <Text>{customer.name}</Text>
+            <Text>{customer.id}</Text>
+          </Flex>
+        );
+      }
+    },
+    {
       title: 'Thông tin tài chính',
       render: (_, record) => {
         const amount_paid = record.amount_paid === null ? formatUnit.moneyVN(0) : formatUnit.moneyVN(record.amount_paid);
@@ -102,7 +114,6 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
       render: (_, record) => {
         const visibleStatus = ['waiting_deposit', 'deposited']
         const visible = visibleStatus.includes(record.status);
-        const isDeposited = record.status === 'waiting_deposit';
         return (
           <Flex vertical gap='middle'>
             <Space size="middle">
@@ -116,9 +127,6 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
                 </Button>
               )}
             </Space>
-            {isDeposited && <Button color="primary" variant="solid" onClick={() => navigate(`/orders/${record.id}/deposit`)}>
-              Đặt cọc
-            </Button>}
           </Flex>
 
         );

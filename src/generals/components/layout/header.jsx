@@ -4,7 +4,6 @@ import { Avatar, Dropdown, Space } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '@generals/contexts/authcontext';
 import { AppResource } from '@generals/constants/AppResource';
-import { formatUnit } from '@helpers/formatUnit';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -53,8 +52,7 @@ const Header = () => {
   return (
     <div className="layoutHeader" >
       <div className='layoutLogo'>
-        <div className="logo"><img src={AppResource.logo} alt="logo" /></div>
-        <p>Tỷ giá: {formatUnit.moneyVN(applicableRate)}</p>
+      <div className="logo"><Link to='/'><img src={AppResource.logo} alt="logo" /></Link></div>
       </div>
       <Dropdown
         menu={{

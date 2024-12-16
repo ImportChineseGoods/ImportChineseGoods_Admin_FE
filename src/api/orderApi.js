@@ -12,7 +12,7 @@ export const orderApi = {
     },
 
     getAllOrder: (page, pageSize) => {
-        const URL_API = `/order/customer?page=${page}&pageSize=${pageSize}`;
+        const URL_API = `/order/?page=${page}&pageSize=${pageSize}`;
         return axios.get(URL_API)
     },
 

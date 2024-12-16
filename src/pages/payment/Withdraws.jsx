@@ -1,4 +1,4 @@
-import { getData } from '@api/getDataApi';
+import { adminData } from '@api/adminDataApi';
 import { transactionApi } from '@api/transactionApi';
 import { bankOption } from '@generals/constants/bankOption';
 import { formatUnit } from '@helpers/formatUnit';
@@ -32,7 +32,7 @@ function Withdraws() {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const res = await getData.orderDepositData();
+      const res = await adminData.orderDepositData();
       if (res.status === 200) {
         setBalance(res.customer.balance);
       }

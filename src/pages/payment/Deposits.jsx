@@ -1,5 +1,5 @@
 
-import { getData } from '@api/getDataApi'
+import { adminData } from '@api/adminDataApi'
 import { AuthContext } from '@generals/contexts/authcontext'
 import { Typography, Breadcrumb, Card, Divider, QRCode, Flex } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
@@ -12,7 +12,7 @@ function Deposits() {
   const [data, setData] = useState([])
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getData.depositData()
+      const response = await adminData.depositData()
       if (response.status === 200) {
         setData(response.data);
       } else {
