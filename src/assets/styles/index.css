@@ -155,12 +155,15 @@ table {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
 }
-
 
 .two-column {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
   }
+
+.btn {
+    padding: 15px 30px;
+}

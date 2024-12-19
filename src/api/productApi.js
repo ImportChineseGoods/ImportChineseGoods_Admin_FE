@@ -18,7 +18,7 @@ export const productApi = {
     },
 
     updateProduct: async (product) => {
-        const URL_API = `/product/${product.id}`;
+        const URL_API = `/product/update-order/${product.id}`;
         return axios.patch(URL_API, product)
     },
 

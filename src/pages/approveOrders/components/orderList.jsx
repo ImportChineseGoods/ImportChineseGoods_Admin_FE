@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Typography, Image, Space, Flex, notification, Popover, Modal } from 'antd';
+import { Table, Button, Typography, Image, Space, Flex, notification, Popconfirm } from 'antd';
 import statusTagMapping from '@components/components/tag';
 import { useNavigate } from 'react-router-dom';
 import { formatUnit } from '@helpers/formatUnit';
 import { orderApi } from '@api/orderApi';
-import Histories from '@components/components/Histories';
-import formatDate from '@helpers/formatDate';
 const { Text, Link } = Typography;
 
 const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
@@ -39,36 +37,11 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
     }
   };
 
-  const approveOrder = async (record) => {
-    const response = await orderApi.approveOrder(record.id);
-    if (response.status === 200) {
-      notification.success({
-        message: 'Duyệt đơn hàng thành công',
-        description: response?.RM || '',
-      });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order.id === record.id ? { ...order, status: 'ordered' } : order
-        )
-      );
-    } else {
-      notification.error({
-        message: 'Duyệt đơn hàng thất bại',
-        description: response?.RM || '',
-      });
-    }
-  }
-
   const columns = [
     {
       title: 'STT',
       dataIndex: 'key',
       rowScope: 'row',
-      render: (text, record) => {
-        page = page || 1;
-        pageSize = pageSize || 1000;
-        return (page - 1) * pageSize + record.key;
-      },
       width: '4%'
     },
 
@@ -124,21 +97,9 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (_, record) => {
-        const StatusTag = statusTagMapping[record.status];
-        return (
-          <Flex vertical>
-            {StatusTag ?
-              <Popover
-                content={<Histories data={record.histories} />}
-                trigger="hover"
-                placement="bottom">
-                <Space><StatusTag /></Space>
-              </Popover>
-              : <Tag color="default">Không xác định</Tag>}
-            <Text>{formatDate(record.update_at)}</Text>
-          </Flex>
-        )
+      render: (status) => {
+        const StatusTag = statusTagMapping[status];
+        return StatusTag ? <StatusTag /> : null;
       },
     },
     {
@@ -148,58 +109,36 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
       render: (_, record) => {
         const visibleStatus = ['waiting_deposit', 'deposited']
         const visible = visibleStatus.includes(record.status);
-        const isOrdering = record.status === 'ordering';
         return (
-          <Space size="middle">
-            <Button color="primary" variant="filled" onClick={() => navigate(`/orders/${record.id}`)}>
-              Xem
-            </Button>
-
-
-            {visible && (
-              <Button color="danger" variant="filled" onClick={() => {
-                Modal.confirm({
-                  title: `Xác nhân hủy đơn hàng ${record.id}`,
-                  content: 'Thao tác này không thể hoàn tác. Bạn có chắc chắn muốn hủy đơn hàng này?',
-                  okText: 'Xác nhận',
-                  cancelText: 'Đóng',
-                  footer: (_, { OkBtn, CancelBtn }) => (
-                    <>
-                      <CancelBtn />
-                      <OkBtn />
-                    </>
-                  ),
-                  onOk: () => handleCancel(record),
-                });
-              }}>
-                Hủy
+          <Flex vertical gap='middle'>
+            <Space size="middle">
+              <Button color="primary" variant="filled" onClick={() => navigate(`/orders/${record.id}`)}>
+                Xem
               </Button>
-            )}
-            {isOrdering && (
-              <Button type='primary' onClick={() => {
-                Modal.confirm({
-                  title: `Xác nhân đặt hàng đơn ${record.id}`,
-                  content: 'Thao tác này không thể hoàn tác.',
-                  okText: 'Xác nhận',
-                  cancelText: 'Đóng',
-                  footer: (_, { OkBtn, CancelBtn }) => (
-                    <>
-                      <CancelBtn />
-                      <OkBtn />
-                    </>
-                  ),
-                  onOk: () => approveOrder(record),
-                });
-              }}>
-                Duyệt
-              </Button>
-            )}
-          </Space>
+
+              {visible && (
+                <Popconfirm
+                  title="Hủy đơn hàng"
+                  description="Xác nhận hủy đơn hàng này?"
+                  onConfirm={() => handleCancel(record)}
+                  cancelText="Đóng"
+                  okText="Xác nhận"
+                  placement="left"
+                >
+                  <Button color="danger" variant="filled">
+                    Hủy
+                  </Button>
+                </Popconfirm>
+              )}
+            </Space>
+          </Flex>
 
         );
       },
     },
   ];
+
+
 
   return (
     <Table
@@ -210,7 +149,7 @@ const OrdersList = ({ data, total, loading, page, pageSize, onPageChange }) => {
         current: page,
         pageSize: pageSize || 1000,
         total: total,
-        onChange: (newPage, newPageSize) => onPageChange(newPage),
+        onChange: (newPage, newPageSize) => onPageChange(newPage, newPageSize),
       }}
       loading={loading}
     />

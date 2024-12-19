@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, notification, Space } from 'antd';
-
+import { Table, Button, notification, Space, Flex, Typography, Popover, Popconfirm, Modal } from 'antd';
+const { Text } = Typography;
 import { useNavigate } from 'react-router-dom';
 import { consignmentApi } from '@/api/consignmentApi';
 import statusTagMapping from './tag';
+import Histories from './Histories';
+import formatDate from '@helpers/formatDate';
 
 const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }) => {
   const navigate = useNavigate();
-  const [consignments, setConsignments] = useState( data ?
-    data.map((consignment, index) => ({ ...consignment, key: index + 1 }) ) : []
+  const [consignments, setConsignments] = useState(data ?
+    data.map((consignment, index) => ({ ...consignment, key: index + 1 })) : []
   );
   useEffect(() => {
     setConsignments(
@@ -16,20 +18,23 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
     );
   }, [data]);
 
-  const handleDelete = async (record) => {
-    const consignmentToDelete = consignments.find((item) => item.key === record.key);
+  const handleCancel = async (record) => {
+    const consignmentToCancel = consignments.find((item) => item.key === record.key);
 
-    const response = await consignmentApi.deleteConsignment(consignmentToDelete);
+    const response = await consignmentApi.cancelConsignment(consignmentToCancel);
     if (response.status === 200) {
       notification.success({
-        message: 'Xóa thành công',
+        message: 'Hủy thành công',
         description: response?.RM || '',
       });
-      const newConsignments = consignments.filter((item) => item.key !== record.key);
-      setConsignments(newConsignments);
+      setConsignments((prevConsignments) =>
+        prevConsignments.map((consignment) =>
+          consignment.id === record.id ? { ...consignment, status: 'cancelled' } : consignment
+        )
+      );
     } else {
       notification.error({
-        message: 'Xóa thất bại',
+        message: 'Hủy thất bại',
         description: response?.RM || '',
       });
     }
@@ -51,6 +56,18 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
       dataIndex: 'id',
     },
     {
+      title: 'Khách hàng',
+      dataIndex: 'customer',
+      render: (customer) => {
+        return (
+          <Flex vertical>
+            <Text>{customer.name}</Text>
+            <Text>{customer.id}</Text>
+          </Flex>
+        );
+      }
+    },
+    {
       title: 'Mã vận đơn',
       dataIndex: 'bol',
       render: (bol) => bol?.bol_code,
@@ -63,9 +80,21 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (status) => {
-        const StatusTag = statusTagMapping[status];
-        return StatusTag ? <StatusTag /> : null;
+      render: (_, record) => {
+        const StatusTag = statusTagMapping[record.status];
+        return (
+          <Flex vertical>
+            {StatusTag ?
+              <Popover
+                content={<Histories data={record.histories} />}
+                trigger="hover"
+                placement="bottom">
+                <Space><StatusTag /></Space>
+              </Popover>
+              : <Tag color="default">Không xác định</Tag>}
+              <Text>{formatDate(record.update_at)}</Text>
+          </Flex>
+        )
       },
     },
     {
@@ -80,8 +109,22 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
             </Button>
 
             {visible && (
-              <Button color="danger" variant="filled" onClick={() => handleDelete(record)}>
-                Xóa
+              <Button color="danger" variant="filled" onClick={() => {
+                Modal.confirm({
+                  title: `Xác nhân hủy đơn hàng ${record.id}`,
+                  content: 'Thao tác này không thể hoàng tác. Bạn có chắc chắn muốn hủy đơn hàng này?',
+                  okText: 'Xác nhận',
+                  cancelText: 'Đóng',
+                  footer: (_, { OkBtn, CancelBtn }) => (
+                    <>
+                      <CancelBtn />
+                      <OkBtn />
+                    </>
+                  ),
+                  onOk: () => handleCancel(record),
+                });
+              }}>
+                Hủy
               </Button>
             )}
           </Space>

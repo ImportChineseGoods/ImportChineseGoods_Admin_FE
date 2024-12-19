@@ -115,7 +115,21 @@ function Complaints() {
         return (
           <>
             {visible && (
-              <Button color="danger" variant="filled" onClick={() => handleCancel(record)}>
+              <Button color="danger" variant="filled" onClick={() => {
+                Modal.confirm({
+                  title: `Xác nhân hủy khiếu nại ${record.id}`,
+                  content: 'Thao tác này không thể hoàn tác. Bạn có chắc chắn muốn hủy đơn hàng này?',
+                  okText: 'Xác nhận',
+                  cancelText: 'Đóng',
+                  footer: (_, { OkBtn, CancelBtn }) => (
+                    <>
+                      <CancelBtn />
+                      <OkBtn />
+                    </>
+                  ),
+                  onOk: () => handleCancel(record),
+                });
+              }}>
                 Hủy
               </Button>
             )}

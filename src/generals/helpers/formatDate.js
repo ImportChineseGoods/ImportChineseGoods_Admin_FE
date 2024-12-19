@@ -1,7 +1,7 @@
 const formatDate = (dateString) => {
     const date = new Date(dateString); // Tạo đối tượng Date từ chuỗi
-    const offset = date.getTimezoneOffset(); // Lấy offset múi giờ hiện tại (phút)
-    const localDate = new Date(date.getTime() - offset * 60 * 1000); // Điều chỉnh về múi giờ hiện tại
+
+    const localDate = new Date(date.getTime()); // Điều chỉnh sang GMT+7
 
     const pad = (num) => String(num).padStart(2, "0"); // Hàm để thêm số 0 nếu cần
 

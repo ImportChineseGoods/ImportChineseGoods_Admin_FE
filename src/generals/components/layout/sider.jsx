@@ -47,12 +47,12 @@ const SiderWeb = () => {
           label: 'Khách hàng',
           children: [
             {
-              key: 'deposits',
-              label: <Link to="/deposits">Danh sách khách hàng</Link>,
+              key: 'customers-list',
+              label: <Link to="/customers-list">Danh sách khách hàng</Link>,
             },
             {
-              key: 'withdraws',
-              label: <Link to="/withdraws">Nạp rút ví</Link>,
+              key: 'create-transactions',
+              label: <Link to="/create-transactions">Nạp rút ví</Link>,
             },
             {
               key: 'transactions',
@@ -60,10 +60,10 @@ const SiderWeb = () => {
             },
           ],
         },
-        userRole !== 'warehouse' && {
-          key: 'approveOrders',
+        {
+          key: 'complaints',
           icon: <DesktopOutlined />,
-          label: <Link to="/approve-orders">Duyệt đơn mua</Link>,
+          label: <Link to="/complaints">Khiếu nại</Link>,
         },
         userRole !== 'warehouse' && {
           key: 'statistics',

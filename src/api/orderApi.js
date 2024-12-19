@@ -21,8 +21,43 @@ export const orderApi = {
         return axios.get(URL_API)
     },
 
+    updateOrder: (id, data) => {
+        const URL_API = `/order/${id}`;
+        return axios.patch(URL_API, data)
+    },
+
+    assignContractCode: (id, contractCode) => {
+        const URL_API = `/order/assign-contract-code/${id}`;
+
+        return axios.patch(URL_API, { contract_code: contractCode })
+    },
+
+    assignBOL: (id, bol_code) => {
+        const URL_API = `/order/assign-bol/${id}`;
+        return axios.patch(URL_API, bolCode)
+    },
+
     cancelOrder: (id) => {
-        const URL_API = `/order/customer-cancel/${id}`;
+        const URL_API = `/order/cancel/${id}`;
         return axios.patch(URL_API)
     },
+
+    queryOrder: (query, page, pageSize) => { 
+        const URL_API = `/order/query?page=${page}&pageSize=${pageSize}`;
+    
+        // Gọi API với params
+        return axios.get(URL_API, {
+            params: {
+                ...query,
+                page: page,
+                pageSize: pageSize,
+            },
+        });
+    },
+
+    approveOrder: (id) => {
+        const URL_API = `/order/approve/${id}`;
+        return axios.patch(URL_API)
+    },
+    
 }
