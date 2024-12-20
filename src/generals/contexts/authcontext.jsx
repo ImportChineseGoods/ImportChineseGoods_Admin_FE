@@ -1,6 +1,4 @@
 import { createContext, useState, useEffect } from 'react';
-import { notification } from 'antd';
-import { parametersApi } from '@api/parameterApi';
 
 // Khởi tạo AuthContext
 export const AuthContext = createContext({

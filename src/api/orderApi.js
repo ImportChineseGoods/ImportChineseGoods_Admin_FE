@@ -32,9 +32,9 @@ export const orderApi = {
         return axios.patch(URL_API, { contract_code: contractCode })
     },
 
-    assignBOL: (id, bol_code) => {
+    assignBOL: (id, bolCode) => {
         const URL_API = `/order/assign-bol/${id}`;
-        return axios.patch(URL_API, bolCode)
+        return axios.patch(URL_API, { bol_code: bolCode })
     },
 
     cancelOrder: (id) => {
