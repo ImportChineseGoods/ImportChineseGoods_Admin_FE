@@ -6,7 +6,8 @@ import { Breadcrumb, Button, Divider, Typography, Flex, Form, Input, InputNumber
 import React, { useEffect, useState } from 'react'
 import { use } from 'react';
 import { Link } from 'react-router-dom'
-import TransactionHistory from './components/TransactionHistory';
+import TransactionHistory from '../components/TransactionHistory';
+import TextArea from 'antd/es/input/TextArea';
 
 const { Text } = Typography;
 
@@ -21,63 +22,74 @@ const formItemLayout = {
   },
 };
 
-function Withdraws() {
+function DepositWithdraw() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState('');
-  const [balance, setBalance] = useState(0);
+  const [customers, setCustomers] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
+  const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+  const [options, setOptions] = useState([]);
 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      const res = await adminData.orderDepositData();
-      if (res.status === 200) {
-        setBalance(res.customer.balance);
-      }
+  const fetchCustomers = async () => {
+    const res = await adminData.getAllCustomer();
+    if (res.status === 200) {
+      setCustomers(res.data);
+    } else {
+      notification.error({
+        message: 'Lỗi khi lấy dữ liệu',
+        description: res.RM || 'Vui lòng thử lại.',
+      });
     }
-    fetchBalance()
-  }, []);
+  }
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    const query = {
+
+    }
+    const res = await transactionApi.queryTransaction(query, page, pageSize);
+    if (res.status === 200) {
+      setTransactions(res.transactions.rows);
+      setTotal(res.transactions.count);
+    } else {
+      notification.error({
+        message: 'Lỗi khi lấy dữ liệu',
+        description: res.RM || 'Vui lòng thử lại.',
+      });
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      setLoading(true);
-      const query = {
-        type: ['withdraw'],
-      }
-      const res = await transactionApi.queryTransaction(query, page, pageSize);
-      if (res.status === 200) {
-        setTransactions(res.transactions.rows);
-        setTotal(res.transactions.count);
-      } else {
-        notification.error({
-          message: 'Lỗi khi lấy dữ liệu',
-          description: res.RM || 'Vui lòng thử lại.',
-        });
-      }
-      setLoading(false);
-    };
+    setLoading(true);
+    fetchCustomers();
     fetchTransactions();
-  }, [balance]);
+    setLoading(false);
+  }, [page, pageSize]);
+
+  useEffect(() => {
+    setOptions(customers.map((customer) => ({
+      value: customer.id,
+      label: `${customer.id} - ${customer.name}`,
+    })))
+  }, [customers]);
 
   const handleSubmit = async (values) => {
-    if (values.value > balance) notification.error({ message: 'Số dư không đủ!' });
-    else {
-      const res = await transactionApi.withdraw(values);
-      if (res.status === 200) {
-        setBalance(res.transaction.balance_after);
-        notification.success({
-          message: 'Rút tiền thành công!',
-          description: res.RM || 'Yêu cầu rút tiền của bạn đã được gửi đi, vui lòng chờ xác nhận!',
-        });
-        form.resetFields();
-      } else {
-        notification.error({
-          message: 'Rút tiền thất bại!',
-          description: res.RM || 'Có lỗi xảy ra, vui lòng thử lại sau!',
-        });
-      }
+    setLoading(true);
+    const res = await transactionApi.createTransaction(values);
+    if (res.status === 200) {
+      notification.success({
+        message: 'Giao dịch thành công',
+        description: res.RM || '',
+      });
+      fetchTransactions();
+    } else {
+      notification.error({
+        message: 'Giao dịch thất bại',
+        description: res.RM || 'Vui lòng thử lại.',
+      });
     }
     setLoading(false);
   };
@@ -88,6 +100,7 @@ function Withdraws() {
 
   const handlePageSizeChange = (value) => {
     setPageSize(value);
+    setPage(1)
   };
 
   const startResult = (page - 1) * pageSize + 1;
@@ -114,44 +127,30 @@ function Withdraws() {
             onFinish={handleSubmit}
           >
             <Form.Item
-              label="Ngân hàng"
-              name="bank"
-              rules={[{ required: true, message: 'Hãy chọn ngân hàng!' }]}
+              label="Khách hàng"
+              name="customer_id"
+              rules={[{ required: true, message: 'Hãy chọn khách hàng!' }]}
             >
               <Select
                 showSearch
-                placeholder="Chọn ngân hàng"
+                placeholder="Chọn khách hàng"
                 optionFilterProp="label"
-                options={bankOption}
+                options={options}
               />
             </Form.Item>
 
             <Form.Item
-              label="Số tài khoản"
-              name="bank_account"
-              rules={[
-                { required: true, message: 'Hãy nhập số tài khoản!' },
-                {
-                  pattern: /^[0-9]{6,20}$/,
-                  message: 'Số tài khoản phải là số, từ 6 đến 20 chữ số!',
-                },
-              ]}
+              label="Loại giao dịch"
+              name="type"
+              rules={[{ required: true, message: 'Hãy chọn loại giao dịch!' }]}
             >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Tên chủ sở hữu"
-              name="bank_owner"
-              rules={[
-                { required: true, message: 'Hãy điền tên chủ sở hữu!' },
-                {
-                  pattern: /^[a-zA-ZÀ-ỹ\s]+$/,
-                  message: 'Tên chỉ được chứa chữ cái và khoảng trắng!',
-                },
-              ]}
-            >
-              <Input />
+              <Select
+                placeholder="Chọn loại giao dịch"
+                options={[
+                  { value: 'deposit', label: 'Nạp tiền' },
+                  { value: 'withdraw', label: 'Rút tiền' },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item
@@ -163,16 +162,16 @@ function Withdraws() {
             </Form.Item>
 
             <Form.Item
-              label="Ghi chú"
-              name="note"
+              label="Nội dung"
+              name="content"
               rules={[
                 {
                   max: 200,
-                  message: 'Ghi chú không được vượt quá 200 ký tự!',
+                  message: 'Nội dung không được vượt quá 200 ký tự!',
                 },
               ]}
             >
-              <Input />
+              <TextArea />
             </Form.Item>
 
             <Form.Item
@@ -190,10 +189,6 @@ function Withdraws() {
 
 
           </Form>
-          <div>
-            <p>Số dư hiện tại: {formatUnit.moneyVN(balance)}</p>
-            <Text type="danger">Tiền sẽ được chuyển về tài khoản trong vòng 24h</Text>
-          </div>
 
         </Flex>
         <Flex vertical className='detailBox' style={{ width: '50%' }}>
@@ -215,7 +210,7 @@ function Withdraws() {
           </Flex>
           <TransactionHistory
             data={transactions}
-            total={total} 
+            total={total}
             loading={loading}
             page={page}
             pageSize={pageSize}
@@ -229,4 +224,4 @@ function Withdraws() {
   )
 }
 
-export default Withdraws
+export default DepositWithdraw

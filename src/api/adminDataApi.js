@@ -6,18 +6,8 @@ export const adminData = {
         return axios.get(URL_API);
     },
 
-    // orderDepositData: () => {
-    //     const URL_API = "/admin/deposit";
-    //     return axios.get(URL_API);
-    // },
-
-    // depositData: () => {
-    //     const URL_API = "/admin/deposit-info";
-    //     return axios.get(URL_API);
-    // },
-
-    // complaintOrderData: () => {
-    //     const URL_API = "/admin/complaint-order";
-    //     return axios.get(URL_API);
-    // },
+    getAllCustomer: () => {
+        const URL_API = "/admin/customers";
+        return axios.get(URL_API);
+    }
 }

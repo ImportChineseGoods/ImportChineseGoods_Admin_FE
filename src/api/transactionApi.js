@@ -1,23 +1,8 @@
+import create from "@ant-design/icons/lib/components/IconFont";
 import { AppResource } from "../generals/constants/AppResource";
 import axios from "./axios.custiomize";
 
-export const transactionApi = {
-    depositOrder: (value, order_id) => {
-        const URL_API = `/transaction/deposit/${order_id}`;
-        if (value < 0) {
-            return AppResource.invalidMessage
-        }
-        return axios.post(URL_API, { value, order_id })
-    },
-
-    withdraw: (data) => {
-        const URL_API = '/transaction/withdraw';
-        if (data.value < 0) {
-            return AppResource.invalidMessage
-        }
-        return axios.post(URL_API, data)
-    },   
-
+export const transactionApi = { 
     queryTransaction: (query, page, pageSize) => {
         const URL_API = '/transaction/query';
         return axios.get(URL_API, {
@@ -25,9 +10,13 @@ export const transactionApi = {
         });
     },
 
-    cancelTransaction: (id) => {
-        const URL_API = `/transaction/cancel/${id}`;
+    approveTransaction: (id) => {
+        const URL_API = `/transaction/approve/${id}`;
         return axios.post(URL_API);
     },
     
+    createTransaction: (values) => {
+        const URL_API = '/transaction/new';
+        return axios.post(URL_API, values);
+    },
 }

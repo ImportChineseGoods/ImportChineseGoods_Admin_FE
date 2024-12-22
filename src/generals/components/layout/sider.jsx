@@ -128,9 +128,9 @@ const SiderWeb = () => {
           label: <Link to="/employees">Danh sách nhân viên</Link>,
         },
         {
-          key: 'createEmployee',
+          key: 'create-employee',
           icon: <TeamOutlined />,
-          label: <Link to="/create-emplloyee">Thêm nhân viên</Link>,
+          label: <Link to="/create-employee">Thêm nhân viên</Link>,
         },
       ],
     },

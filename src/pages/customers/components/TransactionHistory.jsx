@@ -6,6 +6,7 @@ import { Button, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 
 const TransactionHistory = ({ data, total, loading, page, pageSize, onPageChange }) => {
+    console.log(page, pageSize);
     const [transations, setTransactions] = useState(
         data.map((transation, index) => ({ ...transation, key: index + 1 }))
     );
@@ -15,25 +16,6 @@ const TransactionHistory = ({ data, total, loading, page, pageSize, onPageChange
         );
     }, [data]);
 
-    const handleCancel = async (record) => {
-        const response = await transactionApi.cancelTransaction(record.id);
-        if (response.status === 200) {
-            notification.success({
-                message: 'Hủy yêu cầu rút tiền thành công',
-                description: response?.RM || '',
-            });
-            setTransactions((prevTransactions) =>
-                prevTransactions.map((transaction) =>
-                    transaction.id === record.id ? { ...transaction, status: 'cancelled' } : transaction
-                )
-            );
-        } else {
-            notification.error({
-                message: 'Hủy yêu cầu rút tiền thất bại',
-                description: response?.RM || '',
-            });
-        }
-    };
 
     const columns = [
         {
@@ -52,6 +34,15 @@ const TransactionHistory = ({ data, total, loading, page, pageSize, onPageChange
             dataIndex: 'id',
         },
         {
+            title: 'Khách hàng',
+            dataIndex: 'customer',
+            render: (customer) => {
+                return (
+                    <p>{customer.id} - {customer.name}</p>
+                );
+            }
+        },
+        {
             title: 'Ngày tạo',
             dataIndex: 'create_at',
             render: (create_at) => formatDate(create_at),
@@ -65,27 +56,8 @@ const TransactionHistory = ({ data, total, loading, page, pageSize, onPageChange
             title: 'Trạng thái',
             dataIndex: 'status',
             render: (status) => {
-              const StatusTag = statusTagMapping[status];
-              return StatusTag ? <StatusTag /> : null;
-            },
-          },
-        {
-            title: 'Thao tác',
-            width: '100px',
-            key: 'action',
-            render: (_, record) => {
-                const visibleStatus = ['processing']
-                const visible = visibleStatus.includes(record.status);
-                return (
-                    <div>
-                        {visible && (
-                            <Button color="danger" variant="filled" onClick={() => handleCancel(record)}>
-                                Hủy
-                            </Button>
-                        )}
-                    </div>
-
-                );
+                const StatusTag = statusTagMapping[status];
+                return StatusTag ? <StatusTag /> : null;
             },
         },
     ];

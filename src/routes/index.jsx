@@ -4,13 +4,16 @@ import Homepage from "@pages/overview/home";
 import Auth from "@pages/auth/Auth";
 import NotFound from "@pages/NotFound";
 import ProtectedRoute from "@components/router/ProtectedRoute";
-import Transactions from "@pages/customers/Transactions";
+import Transactions from "@pages/customers/screens/Transactions";
 import OrdersPage from "@pages/orders/OrderPage";
 import ConsignmentPage from "@pages/consignments/ConsignmentPage";
 import ComplaintsPage from "@pages/complaints/ComplaintPage";
 import InfoPage from "@pages/information/InfoPage";
-import Customers from "@pages/customers/Customers";
-import Withdraws from "@pages/customers/Withdraws";
+import Withdraws from "@pages/customers/screens/DepositWithdraw";
+import CustomersPage from "@pages/customers/screens/CustomersPage";
+import Parameters from "@pages/parameters/Parameters";
+import CreateEmployee from "@pages/createEmployee/CreateEmployee";
+import EmplpoyeePage from "@pages/employees/EmplpoyeePage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("access_token") !== null;
@@ -23,11 +26,13 @@ const protectedRoutes = [
   { path: "transactions", component: <Transactions /> },
   { path: "complaints/*", component: <ComplaintsPage /> },
   { path: 'information', component: <InfoPage /> },
-  { path: "customers-list", component: <Customers /> },
+  { path: "customers-list/*", component: <CustomersPage /> },
   { path: "create-transactions", component: <Withdraws /> },
+  { path: "parameters", component: <Parameters /> },
+  { path: "employees/*", component: <EmplpoyeePage /> },
+  { path: "create-employee", component: <CreateEmployee /> },
 ];
 
-// Tạo một hàm để bọc các route yêu cầu bảo vệ
 const createProtectedRoute = (path, component) => ({
   path,
   element: <ProtectedRoute isAuthenticated={isAuthenticated()}>{component}</ProtectedRoute>,
