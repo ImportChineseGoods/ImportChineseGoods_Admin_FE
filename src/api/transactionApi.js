@@ -1,5 +1,4 @@
-import create from "@ant-design/icons/lib/components/IconFont";
-import { AppResource } from "../generals/constants/AppResource";
+
 import axios from "./axios.custiomize";
 
 export const transactionApi = { 

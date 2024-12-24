@@ -56,7 +56,7 @@ const Products = ({ data, applicable_rate, locked }) => {
                         <Image width={80} height={80} src={record.image_url} />
                     </div>
                     <div>
-                        <Link href={record.link}>{record.name}</Link>
+                        <Link href={record.link} target='_blank'>{record.name}</Link>
                         <p>Thuộc tính: {record.description}</p>
                         <p>Ghi chú: {record.note}</p>
                     </div>

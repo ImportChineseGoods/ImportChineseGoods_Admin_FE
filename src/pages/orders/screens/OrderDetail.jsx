@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import { orderApi } from '@api/orderApi';
 import { formatUnit } from '@helpers/formatUnit';
 import Products from '../components/Products';
-import Histories from '../../../generals/components/components/Histories';
+import Histories from '@components/components/Histories';
 import formatDate from '@helpers/formatDate';
 import statusTagMapping from '@components/components/tag';
 import OrderManagement from '../components/OrderManagement';
@@ -17,8 +17,10 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [locked, setLocked] = useState(false);
+  const [locked1, setLocked1] = useState(false);
   const StatusTag = statusTagMapping[order?.status];
   const statusList = ['cancelled', 'exported'];
+  const statusList1 = ['waiting_deposit', 'deposited', 'ordering'];
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -27,6 +29,7 @@ const OrderDetail = () => {
         setOrder(response.order);
         setProducts(response.order.products);
         setLocked(statusList.includes(response.order.status));
+        setLocked1(!statusList1.includes(response.order.status));
       } else {
         notification.error({
           message: 'Lỗi khi lấy dữ liệu',
@@ -189,7 +192,7 @@ const OrderDetail = () => {
         <Flex gap="20px">
           <Card loading={loading} className="detailBox">
             <h3 style={{ textAlign: 'center' }}>Danh sách sản phẩm</h3>
-            <Products data={products} applicable_rate={order.applicable_rate} locked={locked}></Products>
+            <Products data={products} applicable_rate={order.applicable_rate} locked={locked1}></Products>
           </Card>
           <Card loading={loading} className="detailBox" style={{ width: '800px' }}>
           <h3 style={{ textAlign: 'center' }}>Quản lý đơn hàng</h3>

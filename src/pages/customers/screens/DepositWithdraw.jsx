@@ -32,17 +32,17 @@ function DepositWithdraw() {
   const [total, setTotal] = useState(0);
   const [options, setOptions] = useState([]);
 
-  const fetchCustomers = async () => {
-    const res = await adminData.getAllCustomer();
-    if (res.status === 200) {
-      setCustomers(res.data);
-    } else {
-      notification.error({
-        message: 'Lỗi khi lấy dữ liệu',
-        description: res.RM || 'Vui lòng thử lại.',
-      });
-    }
-  }
+  // const fetchCustomers = async () => {
+  //   const res = await adminData.getAllCustomer();
+  //   if (res.status === 200) {
+  //     setCustomers(res.data);
+  //   } else {
+  //     notification.error({
+  //       message: 'Lỗi khi lấy dữ liệu',
+  //       description: res.RM || 'Vui lòng thử lại.',
+  //     });
+  //   }
+  // }
 
   const fetchTransactions = async () => {
     setLoading(true);
@@ -64,7 +64,6 @@ function DepositWithdraw() {
 
   useEffect(() => {
     setLoading(true);
-    fetchCustomers();
     fetchTransactions();
     setLoading(false);
   }, [page, pageSize]);
@@ -93,6 +92,24 @@ function DepositWithdraw() {
     }
     setLoading(false);
   };
+
+   const handleSearchCustomer = async (value) => {
+      const response = await adminData.getCustomer({ search: value });
+      console.log(response);
+      if (response.status === 200) {
+        const customerOptions = response.data.map((item) => ({
+          label: `${item.id} - ${item.name}`,
+          value: item.id,
+        }));
+        setOptions(customerOptions);
+      } else {
+        notification.error({
+          message: 'Lỗi khi tìm kiếm khách hàng',
+          description: response?.RM || 'Không tìm thấy khách hàng',
+        });
+      }
+    };
+  
 
   const handlePageChange = (newPage, newPageSize) => {
     setPage(newPage);
@@ -133,8 +150,9 @@ function DepositWithdraw() {
             >
               <Select
                 showSearch
-                placeholder="Chọn khách hàng"
-                optionFilterProp="label"
+                placeholder="Tìm kiếm khách hàng"
+                filterOption={false}
+                onSearch={handleSearchCustomer}
                 options={options}
               />
             </Form.Item>

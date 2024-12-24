@@ -14,6 +14,8 @@ import CustomersPage from "@pages/customers/screens/CustomersPage";
 import Parameters from "@pages/parameters/Parameters";
 import CreateEmployee from "@pages/createEmployee/CreateEmployee";
 import EmplpoyeePage from "@pages/employees/EmplpoyeePage";
+import WarehouseTQPage from "@pages/warehouseTQ/WarehouseTQPage";
+import WarehouseVNPage from "@pages/warehouseVN/WarehouseVNPage";
 
 const isAuthenticated = () => {
   return localStorage.getItem("access_token") !== null;
@@ -31,6 +33,8 @@ const protectedRoutes = [
   { path: "parameters", component: <Parameters /> },
   { path: "employees/*", component: <EmplpoyeePage /> },
   { path: "create-employee", component: <CreateEmployee /> },
+  { path: "warehouse-tq/*", component: <WarehouseTQPage /> },
+  { path: "warehouse-vn/*", component: <WarehouseVNPage /> },
 ];
 
 const createProtectedRoute = (path, component) => ({

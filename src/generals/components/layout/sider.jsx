@@ -107,7 +107,7 @@ const SiderWeb = () => {
             },
             {
               key: 'createDeliveryNote',
-              label: <Link to="/warehouse-vn/create-delivery-note">Quản lý mã vận đơn</Link>,
+              label: <Link to="/warehouse-vn/create-delivery-note">Tạo phiếu xuất kho</Link>,
             },
             {
               key: 'delivery',

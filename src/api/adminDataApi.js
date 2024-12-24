@@ -9,5 +9,14 @@ export const adminData = {
     getAllCustomer: () => {
         const URL_API = "/admin/customers";
         return axios.get(URL_API);
-    }
+    },
+
+    getCustomer: (search) => {
+        const URL_API = "/admin/getCustomer";
+        return axios.get(URL_API, {
+            params: {
+                ...search,
+            },
+        });
+    },
 }
