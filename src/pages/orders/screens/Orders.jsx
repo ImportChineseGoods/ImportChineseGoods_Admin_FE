@@ -18,7 +18,7 @@ function Orders() {
     dateRange: [dayjs().add(-30, 'd'), dayjs()],
     search: '',
   });
-  const [query, setQuery] = useState({});
+  const [query, setQuery] = useState(filter);
 
   const options = [
     {

@@ -17,13 +17,18 @@ export const bolApi = {
     },
 
     queryBOL: (query, page, pageSize) => {
-        const URL_API = `/bol/search?page=${page}&pageSize=${pageSize}`;
-        return axios.get(URL_API, {
-            params: {
-                ...query,
-                page: page,
-                pageSize: pageSize,
-            },
-        });
+        console.log('query:', query, page, pageSize)
+        const URL_API = `/bol/search`;
+        return axios.get(URL_API, { params: {
+            ...query,
+            page: page,
+            pageSize: pageSize
+        } })
     },
+
+    assignCustomer: (data) => {
+        const URL_API = `/bol/assign/${data.customer_id}`;
+        console.log('data:', data)
+        return axios.post(URL_API, data);
+    }
 }

@@ -16,11 +16,12 @@ function BOLs() {
   const [total, setTotal] = useState(0);
   const [options, setOptions] = useState([]);
   const [filter, setFilter] = useState({
+    status: 'china_warehouse_received',
     dateRange: [dayjs().add(-30, 'd'), dayjs()],
     search: '',
     customer: '',
   });
-  const [query, setQuery] = useState({});
+  const [query, setQuery] = useState(filter);
 
   const rangePresets = [
     {
@@ -42,7 +43,7 @@ function BOLs() {
   ];
   const handleFilter = (values) => {
     setQuery({
-      status: values.status,
+      status: 'china_warehouse_received',
       dateRange: [
         values.dateRange[0].format('YYYY-MM-DD 00:00:00'),
         values.dateRange[1].format('YYYY-MM-DD 23:59:59')
@@ -61,7 +62,9 @@ function BOLs() {
         label: `${item.id} - ${item.name}`,
         value: item.id,
       }));
-      setOptions(customerOptions);
+      setOptions([ 
+        { label: 'Đơn vô danh', value: 'anonymous' },
+        ...customerOptions ]);
     } else {
       notification.error({
         message: 'Lỗi khi tìm kiếm khách hàng',
@@ -69,7 +72,6 @@ function BOLs() {
       });
     }
   };
-
 
   const fetchBOLs = async () => {
     setLoading(true);

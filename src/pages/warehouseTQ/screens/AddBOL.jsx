@@ -1,6 +1,7 @@
 
 
 import { bolApi } from '@api/bolApi';
+import AddBOList from '@components/components/AddBOLList';
 import WarehouseBOL from '@components/components/WarehouseBOL';
 import { Breadcrumb, Button, Divider, Flex, Form, Input, InputNumber, notification } from 'antd';
 import React, { useState } from 'react'
@@ -107,7 +108,7 @@ function AddBOL() {
       </Form>
 
       <Divider style={{ margin: '30px 0' }}>Danh sách mã vận đơn</Divider>
-      <WarehouseBOL data={bols} />
+      <AddBOList data={bols} />
     </div>
   );
 }

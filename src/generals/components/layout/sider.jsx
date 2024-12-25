@@ -88,7 +88,7 @@ const SiderWeb = () => {
             },
             {
               key: 'manageBolTQ',
-              label: <Link to="/warehouse-tq/manageBol">Quản lý mã vận đơn</Link>,
+              label: <Link to="/warehouse-tq/management-bol">Quản lý mã vận đơn</Link>,
             },
           ],
         },
@@ -103,7 +103,7 @@ const SiderWeb = () => {
             },
             {
               key: 'manageBolVN',
-              label: <Link to="/warehouse-vn/manageBol">Quản lý mã vận đơn</Link>,
+              label: <Link to="/warehouse-vn/management-bol">Quản lý mã vận đơn</Link>,
             },
             {
               key: 'createDeliveryNote',

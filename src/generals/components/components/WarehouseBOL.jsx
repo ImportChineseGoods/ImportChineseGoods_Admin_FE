@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, notification, Space, Flex, Typography, Popover, Popconfirm, Modal } from 'antd';
+import { Table, Button, notification, Space, Flex, Typography, Popover, Popconfirm, Modal, Select } from 'antd';
 const { Text } = Typography;
 import { useNavigate } from 'react-router-dom';
 import statusTagMapping from './tag';
 import Histories from './Histories';
 import formatDate from '@helpers/formatDate';
 import { bolApi } from '@api/bolApi';
+import { formatUnit } from '@helpers/formatUnit';
+import { adminData } from '@api/adminDataApi';
 
-const WarehouseBOL = ({ data }) => {
+const WarehouseBOL = ({ data, total, loading, page, pageSize, onPageChange }) => {
     const navigate = useNavigate();
     const [bols, setBOLs] = useState([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [customer, setCustomer] = useState('');
+    const [options, setOptions] = useState([]);
     useEffect(() => {
-        console.log('data:', data);
         if (data) {
             setBOLs(
                 data.map((bol, index) => ({ ...bol, key: index + 1 }))
             );
         }
     }, [data]);
-
-    console.log('bols:', bols);
 
     const handleUndo = async (record) => {
         console.log('record:', record);
@@ -40,15 +44,81 @@ const WarehouseBOL = ({ data }) => {
         }
     };
 
+    const handleSearchCustomer = async (value) => {
+        const response = await adminData.getCustomer({ search: value });
+        console.log(response);
+        if (response.status === 200) {
+            const customerOptions = response.data.map((item) => ({
+                label: `${item.id} - ${item.name}`,
+                value: item.id,
+            }));
+            setOptions(customerOptions);
+        } else {
+            notification.error({
+                message: 'Lỗi khi tìm kiếm khách hàng',
+                description: response?.RM || 'Không tìm thấy khách hàng',
+            });
+        }
+    };
+
+    const handleOrder = async () => {
+        if (selectedRows.length === 0) {
+            notification.error({
+                message: 'Không có đơn vô danh nào được chọn',
+                description: 'Vui lòng chọn đơn vô danh để gán',
+            });
+            return;
+        }
+
+        if (!customer) {
+            notification.error({
+                message: 'Chưa chọn khách hàng',
+                description: 'Vui lòng chọn khách hàng để gán',
+            });
+            return;
+        }
+
+        const dataToSend = {
+            customer_id: customer,
+            bols: selectedRows,
+        };
+
+        const response = await bolApi.assignCustomer(dataToSend);
+        if (response.status === 200) {
+            notification.success({
+                message: 'Gán khách hàng thành công',
+                description: response?.RM || '',
+            });
+            setTimeout(() => {
+                navigate(0);
+            }, 500);
+
+        } else {
+            notification.error({
+                message: 'Gán khách hàng thất bại',
+                description: response?.RM || '',
+            });
+        }
+    };
+
     const columns = [
         {
             title: 'STT',
             dataIndex: 'key',
             rowScope: 'row',
+            render: (text, record) => {
+                page = page || 1;
+                pageSize = pageSize || 1000;
+                return (page - 1) * pageSize + record.key;
+            },
         },
         {
             title: 'Mã vận đơn',
             dataIndex: 'bol_code',
+        },
+        {
+            title: 'Mã khách hàng',
+            render: (_, record) => record?.order?.customer.id || record?.consignment?.customer.id || '_',
         },
         {
             title: 'Mã đơn hàng',
@@ -85,6 +155,7 @@ const WarehouseBOL = ({ data }) => {
         {
             title: 'Cân nặng (kg)',
             dataIndex: 'weight',
+            render: (weight) => weight ? formatUnit.weight(weight) : '_',
         },
         {
             title: 'Thao tác',
@@ -116,13 +187,52 @@ const WarehouseBOL = ({ data }) => {
         },
     ];
 
+    const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRows(selectedRows);
+        },
+        getCheckboxProps: (record) => ({
+            disabled: record.order_id || record.consignment_id,   
+            name: record.name,
+        }),
+    };
+
     return (
-        <Table
-            columns={columns}
-            dataSource={bols}
-            bordered
-        />
-    );
+        <>
+            <Flex gap='20px' align='center' justify='center' style={{ margin: '10px' }}>
+                <p>Gán khách hàng: </p>
+                <Select
+                    showSearch
+                    placeholder="Gán khách hàng"
+                    filterOption={false}
+                    onSearch={handleSearchCustomer}
+                    onChange={(value) => setCustomer(value)}
+                    options={options}
+                    allowClear
+                    style={{ width: 300 }}
+                />
+                <Button type="primary" onClick={handleOrder}>Gán</Button>
+            </Flex>
+                <Table
+                    rowSelection={{
+                        type: 'checkbox',
+                        ...rowSelection,
+                    }}
+                    columns={columns}
+                    dataSource={bols}
+                    bordered
+                    pagination={{
+                        current: page,
+                        pageSize: pageSize || 1000,
+                        total: total,
+                        onChange: (newPage, newPageSize) => onPageChange(newPage, newPageSize),
+                    }}
+                    loading={loading}
+                />
+            </>
+
+            );
 };
 
-export default WarehouseBOL;
+            export default WarehouseBOL;

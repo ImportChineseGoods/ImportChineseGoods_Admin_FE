@@ -7,7 +7,7 @@ const WarehouseTQPage = () => {
   return (
     <Routes>
         <Route path="/add" element={<AddBOL />} />
-        <Route path="/manageBol" element={<ManageBOL />} />
+        <Route path="/management-bol" element={<ManageBOL />} />
     </Routes>
   )
 }
