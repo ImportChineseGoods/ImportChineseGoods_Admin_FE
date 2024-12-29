@@ -19,4 +19,11 @@ export const adminData = {
             },
         });
     },
+
+    getOrderByCustomer: (data) => {
+        const URL_API = "/admin/getOrderByCustomer";
+        return axios.get(URL_API, {
+            params: data
+        });
+    },
 }

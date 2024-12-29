@@ -6,6 +6,7 @@ import { consignmentApi } from '@/api/consignmentApi';
 import statusTagMapping from './tag';
 import Histories from './Histories';
 import formatDate from '@helpers/formatDate';
+import { formatUnit } from '@helpers/formatUnit';
 
 const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }) => {
   const navigate = useNavigate();
@@ -78,9 +79,15 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
       width: '30%',
     },
     {
+      title: 'Cân nặng (kg)',
+      dataIndex: 'weight',
+      render: (weight) => formatUnit.weight(weight),
+    },
+    {
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (_, record) => {
+        console.log('record', record);
         const StatusTag = statusTagMapping[record.status];
         return (
           <Flex vertical>

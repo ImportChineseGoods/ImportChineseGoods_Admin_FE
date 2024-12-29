@@ -118,7 +118,7 @@ const WarehouseBOL = ({ data, total, loading, page, pageSize, onPageChange }) =>
         },
         {
             title: 'Mã khách hàng',
-            render: (_, record) => record?.order?.customer.id || record?.consignment?.customer.id || '_',
+            render: (_, record) => record?.order?.customer_id || record?.consignment?.customer_id || '_',
         },
         {
             title: 'Mã đơn hàng',
@@ -141,7 +141,7 @@ const WarehouseBOL = ({ data, total, loading, page, pageSize, onPageChange }) =>
                     <Flex vertical>
                         {StatusTag ?
                             <Popover
-                                content={<Histories data={record.histories} />}
+                                content={<Histories data={record?.order?.histories || record?.consignment?.histories || record?.anonymous?.histories} />}
                                 trigger="hover"
                                 placement="bottom">
                                 <Space><StatusTag /></Space>

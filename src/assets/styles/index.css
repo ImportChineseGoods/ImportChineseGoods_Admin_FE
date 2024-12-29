@@ -48,6 +48,29 @@ table {
     width: 100%;
 }
 
+/* DeliveryDetail.css */
+@media print {
+    body * {
+        visibility: hidden;
+        /* Ẩn tất cả các phần tử */
+    }
+
+    .print-section,
+    .print-section * {
+        visibility: visible;
+        /* Chỉ hiển thị phần cần in */
+    }
+
+    .print-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Đảm bảo phần phiếu chiếm toàn bộ chiều rộng */
+    }
+}
+
+
 .custom-header .ant-menu::before {
     content: none !important;
     display: none !important;
@@ -57,7 +80,7 @@ table {
     content: none !important;
     display: none !important;
 }
-  
+
 .center-div {
     display: flex;
     justify-content: center;
@@ -103,7 +126,7 @@ table {
 .layoutHeader {
     justify-content: space-between;
     align-items: center;
-    padding: 5px 50px ;
+    padding: 5px 50px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     z-index: 1;
     position: fixed;
@@ -162,7 +185,7 @@ table {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1px;
-  }
+}
 
 .btn {
     padding: 15px 30px;

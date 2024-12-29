@@ -41,7 +41,8 @@ export const employeeApi = {
         return axios.patch(URL_API);
     },
 
-    getEmployee: (id) => {
+    getEmployee: () => {
+        const id = 'me'
         const URL_API = `/employee/${id}`;
         return axios.get(URL_API);
     },
@@ -50,4 +51,14 @@ export const employeeApi = {
         const URL_API = `/employee/${id}`;
         return axios.patch(URL_API, data);
     },
+
+    editInfo: (data) => {
+        const URL_API = `/employee/edit-info`;
+        return axios.patch(URL_API, data);
+    },
+
+    changePassword: (data) => {
+        const URL_API = `/employee/change-password`;
+        return axios.patch(URL_API, data);
+    }
 }

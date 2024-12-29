@@ -1,4 +1,5 @@
-import { customerApi } from '@api/customerApi';
+
+import { employeeApi } from '@api/employeeApi';
 import { Button, Form, Input, notification } from 'antd'
 import React from 'react'
 
@@ -6,7 +7,7 @@ function ChangePassword() {
   const [form] = Form.useForm();  
 
   const handleSubmit = async (values) => {
-    const res = await customerApi.changePassword(values);
+    const res = await employeeApi.changePassword(values);
     if (res.status === 200) {
       notification.success({
         message: 'Đổi mật khẩu thành công!',

@@ -2,7 +2,6 @@
 
 import { bolApi } from '@api/bolApi';
 import AddBOList from '@components/components/AddBOLList';
-import WarehouseBOL from '@components/components/WarehouseBOL';
 import { Breadcrumb, Button, Divider, Flex, Form, Input, InputNumber, notification } from 'antd';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';

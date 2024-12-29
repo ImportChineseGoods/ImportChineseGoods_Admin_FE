@@ -21,7 +21,7 @@ function Histories({ data }) {
   }, [data]);
 
   return (
-      <Flex vertical justify='center' style={{ width: '350px' }}>
+      <Flex vertical justify='center' style={{ width: '350px', marginTop: '20px' }}>
           <Timeline
             mode="right"
             items={histories}

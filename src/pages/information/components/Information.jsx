@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { customerApi } from '@api/customerApi';
+import { employeeApi } from '@api/employeeApi';
 import uploadImageToCloudinary from '@generals/utils/uploadImage';
 import { notification, Form, Input, Button, Upload, Space } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
@@ -20,11 +20,11 @@ function Information() {
 
   useEffect(() => {
     const fetchInformation = async () => {
-      const response = await customerApi.getCustomerInfo();
+      const response = await employeeApi.getEmployee();
       if (response.status === 200) {
-        const customerData = response.customer;
-        setInformation(customerData);
-        form.setFieldsValue(customerData);
+        const employeeData = response.employee;
+        setInformation(employeeData);
+        form.setFieldsValue(employeeData);
       } else {
         notification.error({
           message: 'Lỗi khi lấy dữ liệu',
@@ -66,11 +66,10 @@ function Information() {
     }
 
     // Gọi API tạo sản phẩm
-    const res = await customerApi.editInfo({
+    const res = await employeeApi.editInfo({
       name: values.name,
       phone: values.phone,
-      address: values.address,
-      note: values.note,
+      email: values.email,
       avatar: formData.get('image_url') || null,
     });
     if (res.status === 200) {
@@ -101,10 +100,6 @@ function Information() {
       layout="horizontal"
       onFinish={handleSubmit}
     >
-      <Form.Item label="Mã khách hàng" name="id">
-        <Input disabled />
-      </Form.Item>
-
       <Form.Item label="Họ và tên" name="name">
         <Input />
       </Form.Item>
@@ -114,26 +109,12 @@ function Information() {
       </Form.Item>
 
       <Form.Item label="Email" name="email">
+        <Input />
+      </Form.Item>
+
+      <Form.Item label="Tên đăng nhập" name="username">
         <Input disabled />
       </Form.Item>
-
-      <Form.Item label="Địa chỉ" name="address">
-        <TextArea rows={2} />
-      </Form.Item>
-
-      <Form.Item label="CK phí mua hàng" name="purchase_discount">
-        <Input suffix='%' disabled />
-      </Form.Item>
-
-
-      <Form.Item label="CK phí vận chuyển" name="shipping_discount">
-        <Input suffix='%' disabled />
-      </Form.Item>
-
-      <Form.Item label="Tỉ lệ cọc" name="deposit_rate">
-        <Input suffix='%' disabled />
-      </Form.Item>
-
 
       <Form.Item label="Upload" valuePropName="fileList" getValueFromEvent={normFile}>
         <Upload
