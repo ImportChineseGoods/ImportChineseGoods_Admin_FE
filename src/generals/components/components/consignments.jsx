@@ -87,7 +87,6 @@ const ConsignmentsList = ({ data, total, loading, page, pageSize, onPageChange }
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (_, record) => {
-        console.log('record', record);
         const StatusTag = statusTagMapping[record.status];
         return (
           <Flex vertical>

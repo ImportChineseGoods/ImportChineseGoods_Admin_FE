@@ -21,8 +21,6 @@ export const consignmentApi = {
     },
 
     updateConsignment: (consignment_id, data) => {
-        console.log(data);
-        console.log(consignment_id);
         const URL_API = `/consignment/${consignment_id}`;
         return axios.patch(URL_API, data)
     },

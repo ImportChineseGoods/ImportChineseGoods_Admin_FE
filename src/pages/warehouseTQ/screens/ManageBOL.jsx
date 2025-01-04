@@ -56,7 +56,6 @@ function BOLs() {
 
   const handleSearchCustomer = async (value) => {
     const response = await adminData.getCustomer({ search: value });
-    console.log(response);
     if (response.status === 200) {
       const customerOptions = response.data.map((item) => ({
         label: `${item.id} - ${item.name}`,

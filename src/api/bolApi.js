@@ -3,7 +3,6 @@ import axios from "./axios.custiomize";
 
 export const bolApi = { 
     updateBOL: (values) => {
-        console.log('values:', values)
         const URL_API = `/bol/${values.bol_code}`;
         return axios.patch(URL_API, {
             status: values.status,
@@ -17,7 +16,6 @@ export const bolApi = {
     },
 
     queryBOL: (query, page, pageSize) => {
-        console.log('query:', query, page, pageSize)
         const URL_API = `/bol/search`;
         return axios.get(URL_API, { params: {
             ...query,
@@ -28,7 +26,6 @@ export const bolApi = {
 
     assignCustomer: (data) => {
         const URL_API = `/bol/assign/${data.customer_id}`;
-        console.log('data:', data)
         return axios.post(URL_API, data);
     }
 }

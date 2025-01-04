@@ -1,8 +1,8 @@
 import { employeeApi } from '@api/employeeApi';
+import FormEmployee from '@components/components/FormEmployee';
 import { Breadcrumb, Divider, notification } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import FormEmployee from '../../../generals/components/components/FormEmployee';
 
 function UpdateEmployee() {
   const { employee_id } = useParams();
@@ -51,7 +51,9 @@ function UpdateEmployee() {
           {
             title: 'Cập nhật nhân viên',
           },
-
+          {
+            title: employee?.name,
+          },
         ]}
       />
       <Divider />

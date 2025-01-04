@@ -6,7 +6,6 @@ import { Button, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 
 const TransactionHistory = ({ data, total, loading, page, pageSize, onPageChange }) => {
-    console.log(page, pageSize);
     const [transations, setTransactions] = useState(
         data.map((transation, index) => ({ ...transation, key: index + 1 }))
     );

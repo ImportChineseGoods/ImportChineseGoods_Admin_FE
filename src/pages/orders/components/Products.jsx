@@ -26,7 +26,6 @@ const Products = ({ data, applicable_rate, locked }) => {
     // Hàm gọi API cập nhật sản phẩm
     const updateProducts = async () => {
         products.forEach(async (product) => {
-            console.log(product);
             const res = await productApi.updateProduct(product);
             if (res.status !== 200) {
                 notification.error({

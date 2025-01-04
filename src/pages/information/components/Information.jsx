@@ -1,9 +1,11 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { employeeApi } from '@api/employeeApi';
+import { AuthContext } from '@generals/contexts/authcontext';
 import uploadImageToCloudinary from '@generals/utils/uploadImage';
 import { notification, Form, Input, Button, Upload, Space } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const tailLayout = {
   wrapperCol: {
@@ -13,6 +15,7 @@ const tailLayout = {
 };
 
 function Information() {
+  const { auth } = useContext(AuthContext);
   const [form] = Form.useForm(); // Tạo đối tượng form
   const [information, setInformation] = useState({});
   const [loading, setLoading] = useState('');
@@ -20,7 +23,7 @@ function Information() {
 
   useEffect(() => {
     const fetchInformation = async () => {
-      const response = await employeeApi.getEmployee();
+      const response = await employeeApi.getEmployee(auth.user.id);
       if (response.status === 200) {
         const employeeData = response.employee;
         setInformation(employeeData);
@@ -41,7 +44,6 @@ function Information() {
     }
     return e?.fileList;
   };
-  console.log(information);
 
   const handleSubmit = async (values) => {
     const formData = new FormData();
@@ -65,7 +67,6 @@ function Information() {
       }
     }
 
-    // Gọi API tạo sản phẩm
     const res = await employeeApi.editInfo({
       name: values.name,
       phone: values.phone,

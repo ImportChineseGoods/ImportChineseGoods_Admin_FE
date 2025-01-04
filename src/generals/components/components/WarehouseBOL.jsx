@@ -26,7 +26,6 @@ const WarehouseBOL = ({ data, total, loading, page, pageSize, onPageChange }) =>
     }, [data]);
 
     const handleUndo = async (record) => {
-        console.log('record:', record);
         const response = await bolApi.undoBOL(record.bol_code);
         if (response?.status === 200) {
             notification.success({
@@ -46,7 +45,6 @@ const WarehouseBOL = ({ data, total, loading, page, pageSize, onPageChange }) =>
 
     const handleSearchCustomer = async (value) => {
         const response = await adminData.getCustomer({ search: value });
-        console.log(response);
         if (response.status === 200) {
             const customerOptions = response.data.map((item) => ({
                 label: `${item.id} - ${item.name}`,

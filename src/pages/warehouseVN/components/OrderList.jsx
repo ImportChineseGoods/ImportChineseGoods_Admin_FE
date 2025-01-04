@@ -16,8 +16,6 @@ function OrderList({ data, setSelectedRowKeys, setSelectedRows }) {
     setOrders(data.map((order, index) => ({ ...order, key: index + 1 }))) 
   }, [data])
 
-  console.log(orders)
-
     const columns = [
         {
           title: 'STT',

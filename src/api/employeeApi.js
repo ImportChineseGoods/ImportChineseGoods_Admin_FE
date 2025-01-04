@@ -41,8 +41,7 @@ export const employeeApi = {
         return axios.patch(URL_API);
     },
 
-    getEmployee: () => {
-        const id = 'me'
+    getEmployee: (id) => {
         const URL_API = `/employee/${id}`;
         return axios.get(URL_API);
     },

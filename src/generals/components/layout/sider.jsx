@@ -19,6 +19,9 @@ const SiderWeb = () => {
   const location = useLocation();
   const currentPath = location.pathname.split('/')[1];
 
+  const isAdmin = userRole === 'admin' || userRole === 'accountant';
+  const isOrder = userRole === 'order' || userRole === 'sales';
+
   // Tạo items menu
   const items = [
     {
@@ -65,10 +68,29 @@ const SiderWeb = () => {
           icon: <DesktopOutlined />,
           label: <Link to="/complaints">Khiếu nại</Link>,
         },
-        userRole !== 'warehouse' && {
+        isOrder && {
           key: 'statistics',
           icon: <FileOutlined />,
-          label: <Link to="/statistics">Thống kê</Link>,
+          label: <Link to="/statistics/debt">Thống kê công nợ</Link>,
+        },
+        isAdmin && {
+          key: 'statistics',
+          icon: <FileOutlined />,
+          label: 'Thống kê',
+          children: [
+            {
+              key: 'revenue',
+              label: <Link to="/statistics/revenue">Thống kê doanh thu</Link>,
+            },
+            {
+              key: 'debt',
+              label: <Link to="/statistics/debt">Thống kê công nợ</Link>,
+            },
+            {
+              key: 'profit',
+              label: <Link to="/statistics/profit">Thống kê lợi nhuận</Link>,
+            },        
+          ],
         },
       ].filter(Boolean), // Loại bỏ các mục null/undefined
     },

@@ -19,7 +19,6 @@ const AddBOList = ({ data }) => {
     }, [data]);
 
     const handleUndo = async (record) => {
-        console.log('record:', record);
         const response = await bolApi.undoBOL(record.bol_code);
         if (response?.status === 200) {
             notification.success({

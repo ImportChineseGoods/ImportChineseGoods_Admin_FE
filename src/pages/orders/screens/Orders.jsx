@@ -92,6 +92,7 @@ function Orders() {
     });
     setPage(1);
   };
+  
   const fetchOrders = async () => {
     setLoading(true);
     const response = await orderApi.queryOrder(query, page, pageSize);

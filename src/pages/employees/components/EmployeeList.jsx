@@ -117,7 +117,6 @@ const EmployeeList = ({ data, total, loading, page, pageSize, onPageChange }) =>
 
     const handleLock = async (id) => {
         const response = await employeeApi.lockEmployee(id);
-        console.log(response);
         if (response?.status === 200) {
             notification.success({
                 message: 'Cập nhật thành công',
