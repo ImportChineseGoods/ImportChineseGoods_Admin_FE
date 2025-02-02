@@ -23,21 +23,6 @@ function DebtStatistics() {
   });
   const [query, setQuery] = useState(filter);
 
-  const optionOrders = [
-    {
-      label: 'Đơn đặt hàng hộ',
-      value: 'order',
-    },
-    {
-      label: 'Đơn ký gửi',
-      value: 'consignment',
-    },
-    {
-      label: 'Tất cả đơn hàng',
-      value: 'all',
-    },
-  ];
-
   const handleFilter = (values) => {
     setQuery({
       employee: values.employee,

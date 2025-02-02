@@ -101,7 +101,10 @@ function ManageBOL() {
             title: <Link to="/">Trang chủ</Link>,
           },
           {
-            title: 'Đơn đặt hàng',
+            title: 'Kho Việt Nam'
+          },
+          {
+            title: 'Quản lý mã vận đơn',
           },
         ]}
       />

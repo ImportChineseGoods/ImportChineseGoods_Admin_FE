@@ -95,7 +95,10 @@ function Deliveries() {
             title: <Link to="/">Trang chủ</Link>,
           },
           {
-            title: 'Đơn đặt hàng',
+            title: 'Kho Việt Nam'
+          },
+          {
+            title: 'Quản lý phiếu xuất kho',
           },
         ]}
       />

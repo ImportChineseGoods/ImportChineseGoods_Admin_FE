@@ -27,7 +27,7 @@ function TransactionsAll({data, total, loading, page, pageSize, onPageChange}) {
       });
       setTransactions((prevTransactions) =>
         prevTransactions.map((transaction) =>
-          transaction.id === record.id ? { ...transaction, status: 'cancelled' } : transaction
+          transaction.id === record.id ? { ...transaction, status: 'completed' } : transaction
         )
       );
     } else {

@@ -101,7 +101,10 @@ function BOLs() {
             title: <Link to="/">Trang chủ</Link>,
           },
           {
-            title: 'Đơn đặt hàng',
+            title: 'Kho Trung Quốc'
+          },
+          {
+            title: 'Quản lý mã vận đơn',
           },
         ]}
       />

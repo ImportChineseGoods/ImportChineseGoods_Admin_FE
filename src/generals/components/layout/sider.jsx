@@ -21,6 +21,7 @@ const SiderWeb = () => {
 
   const isAdmin = userRole === 'admin' || userRole === 'accountant';
   const isOrder = userRole === 'order' || userRole === 'sales';
+  const isWarehouse = userRole === 'warehouse';
 
   // Tạo items menu
   const items = [
@@ -44,7 +45,7 @@ const SiderWeb = () => {
           icon: <DesktopOutlined />,
           label: <Link to="/consignments">Đơn ký gửi</Link>,
         },
-        {
+        !isWarehouse && {
           key: 'customers',
           icon: <TeamOutlined />,
           label: 'Khách hàng',
@@ -53,7 +54,7 @@ const SiderWeb = () => {
               key: 'customers-list',
               label: <Link to="/customers-list">Danh sách khách hàng</Link>,
             },
-            {
+            isAdmin && {
               key: 'create-transactions',
               label: <Link to="/create-transactions">Nạp rút ví</Link>,
             },
@@ -63,7 +64,12 @@ const SiderWeb = () => {
             },
           ],
         },
-        {
+        isWarehouse && {
+          key: 'customers-list',
+          icon: <TeamOutlined />,
+          label: <Link to="/customers-list">Danh sách khách hàng</Link>,
+        },
+        !isWarehouse && {
           key: 'complaints',
           icon: <DesktopOutlined />,
           label: <Link to="/complaints">Khiếu nại</Link>,
